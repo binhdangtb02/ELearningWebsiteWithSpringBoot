@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @Data
 public class UserWord {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
     @ManyToOne
     @JoinColumn(name = "username")

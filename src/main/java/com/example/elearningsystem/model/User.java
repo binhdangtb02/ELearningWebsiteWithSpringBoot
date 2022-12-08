@@ -1,5 +1,9 @@
 package com.example.elearningsystem.model;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -12,6 +16,9 @@ import java.util.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
+@JsonIdentityInfo(
+        generator = ObjectIdGenerators.PropertyGenerator.class,
+        property = "username")
 public class User{
     @Id
     @Column(name = "username", length = 50, nullable = false)
@@ -29,15 +36,17 @@ public class User{
             inverseJoinColumns = {@JoinColumn(name = "roleid")},
             uniqueConstraints = {@UniqueConstraint(columnNames = {"username", "roleid"})}
     )
+    @JsonBackReference
     private Set<Role> roles = new HashSet<>();
 
-    @ManyToMany(fetch = FetchType.EAGER)
+    @ManyToMany()
     @JoinTable(
             name = "User_Category",
             joinColumns = {@JoinColumn(name = "username")},
             inverseJoinColumns = {@JoinColumn(name = "categoryid")},
             uniqueConstraints = {@UniqueConstraint(columnNames = {"username", "categoryid"})}
     )
+
     private Collection<Category> categories;
 
     @OneToMany(mappedBy = "user")
